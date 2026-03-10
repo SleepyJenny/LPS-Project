@@ -1,0 +1,34 @@
+[
+    {
+        "id": 1,
+        "topic":"LPIC-101",
+        "type":"single-choice",
+        "question":"Which type of file system is created by mkfs when it is executed with the block device name only and without any additional parameters?",
+        "options":["XFS","VFAT", "ext2", "ext3", "ext4"],
+        "correctAnswer":"ext2"
+    },
+    {
+        "id": 2,
+        "topic":"LPIC-101",
+        "type":"single-choice",
+        "question":"Which umask value ensures that new directories can be read, written and listed by their owning user, read and listed by their owning group and are not accessible at all for everyone else?",
+        "options":["0750","0027", "0036", "7640", "0029"],
+        "correctAnswer":"0027"
+    },
+    {
+        "id": 3,
+        "topic":"LPIC-101",
+        "type":"single-choice",
+        "question":"Which of the following commands changes the number of days before the ext3 filesystem on /dev/sda1 has to run through a full filesystem check while booting?",
+        "options":["tune2fs -d 200 /dev/sda1","tune2fs -i 200 /dev/sda17", "tune2fs -c 200 /dev/sda1", "tune2fs -n 200 /dev/sda1", "tune2fs --days 200 /dev/sda1"],
+        "correctAnswer":"tune2fs -i 200 /dev/sda1"
+    },
+    {
+        "id": 4,
+        "topic":"LPIC-101",
+        "type":"single-choice",
+        "question":"Which is the default percentage of reserved space for the root user on new ext4 filesystems?",
+        "options":["10%","3%", "15%", "0%", "5%"],
+        "correctAnswer":"5%"
+    }
+]
