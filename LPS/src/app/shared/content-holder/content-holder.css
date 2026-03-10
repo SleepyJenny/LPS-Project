@@ -1,0 +1,11 @@
+.content-container {
+    background-color: #BDAFFF;
+
+    min-height: 700px;
+    min-width: 1400px;
+    
+    display: flex;
+    gap: 20px;
+    
+    border-radius: 25px;
+}
