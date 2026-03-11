@@ -1,1 +1,15 @@
-<div class="container">{{ allQuestions()[0]?.question }}</div>
+@if ((quizMode$ | async) == 'partial-exam') {
+  partial exam mode
+} @else if ((quizMode$ | async) == 'learn') {
+    <div class="container">
+        <div class="question">{{ allQuestions()[0]?.question }}</div>
+        <div class="answer">{{ allQuestions()[0]?.correctAnswer }}</div>
+    </div>
+} @else if ((quizMode$ | async) == 'single-choice') {
+    single choice mode
+} @else if ((quizMode$ | async) == 'full-exam') {
+    full exam mode
+}
+@else {
+    Please select a quiz mode to start the quiz.
+}
