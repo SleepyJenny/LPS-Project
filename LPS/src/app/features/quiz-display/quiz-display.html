@@ -1,15 +1,15 @@
 @if ((quizMode$ | async) == 'partial-exam') {
-  partial exam mode
+  <app-quiz-content></app-quiz-content>
 } @else if ((quizMode$ | async) == 'learn') {
-    <div class="container">
-        <div class="question">{{ allQuestions()[0]?.question }}</div>
-        <div class="answer">{{ allQuestions()[0]?.correctAnswer }}</div>
-    </div>
+    <app-study-content></app-study-content>
 } @else if ((quizMode$ | async) == 'single-choice') {
-    single choice mode
+    <app-study-content></app-study-content>
 } @else if ((quizMode$ | async) == 'full-exam') {
-    full exam mode
-}
-@else {
+    <app-quiz-content></app-quiz-content>
+} @else if ((quizMode$ | async) == 'fill-in') {
+    <app-study-content></app-study-content>
+} @else if ((quizMode$ | async) == 'multiple-choice') {
+    <app-study-content></app-study-content>
+} @else {
     Please select a quiz mode to start the quiz.
 }

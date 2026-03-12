@@ -23,4 +23,11 @@ setPartialExamMode() {
 setSingleChoiceMode() {
   this.modusManager.setMode('single-choice');
 }
+setMultipleChoiceMode() {
+  this.modusManager.setMode('multiple-choice');
+}
+setFillInMode() {
+  this.modusManager.setMode('fill-in');
+}
+
 }

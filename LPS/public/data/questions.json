@@ -30,5 +30,265 @@
         "question":"Which is the default percentage of reserved space for the root user on new ext4 filesystems?",
         "options":["10%","3%", "15%", "0%", "5%"],
         "correctAnswer":"5%"
+    },
+    {
+        "id": 5,
+        "topic": "LPIC-101",
+        "type": "single-choice",
+        "question": "Which of the following is true when a file system, which is neither listed in /etc/fstab nor known to system, is mounted manually?",
+        "options": [
+            "systemd ignores any manual mounts which are not done using the systemctl mount command",
+            "The command systemctl mountsync can be used to create a mount unit based on the existing mount",
+            "systemd automatically generates a mount unit and monitors the mount point without changing it",
+            "Unless a systemd mount unit is created, systemd unmounts the file system after a short period of time",
+            "systemctl unmount must be used to remove the mount because system opens a file descriptor on the mount point"
+        ],
+        "correctAnswer": "systemd automatically generates a mount unit and monitors the mount point without changing it"
+    },
+    {
+        "id": 6,
+        "topic": "LPIC-101",
+        "type": "fill-in",
+        "question": "Which program updates the database that is used by the locate command? (Specify ONLY the command without any path or parameters).",
+        "options": ["updatedb"],
+        "correctAnswer": "updatedb"
+    },
+    {
+        "id": 7,
+        "topic": "LPIC-101",
+        "type": "single-choice",
+        "question": "What does the command mount --bind do?",
+        "options": [
+            "It makes the contents of one directory available in another directory",
+            "It mounts all available filesystems to the current directory",
+            "It mounts all user mountable filesystems to the user’s home directory",
+            "It mounts all file systems listed in /etc/fstab which have the option userbindset",
+            "It permanently mounts a regular file to a directory"
+        ],
+        "correctAnswer": "It makes the contents of one directory available in another directory"
+    },
+    {
+        "id": 8,
+        "topic": "LPIC-101",
+        "type": "single-choice",
+        "question": "Consider the following output from the command ls -i: 525385 a.txt. How would a new file named c.txt be created with the same inode number as a.txt (Inode 525385)?",
+        "options": [
+            "ln -h a.txt c.txt",
+            "ln c.txt a.txt",
+            "ln a.txt c.txt",
+            "ln -f c.txt a.txt",
+            "ln -i 525385 c.txt"
+        ],
+        "correctAnswer": "ln a.txt c.txt"
+    },
+    {
+        "id": 9,
+        "topic": "LPIC-101",
+        "type": "multiple-choice",
+        "question": "Consider the following directory: drwxrwxr-x 2 root sales 4096 Jan 1 15:21 sales. Which command ensures new files created within the directory sales are owned by the group sales? (Choose two.)",
+        "options": [
+            "chmod g+s sales",
+            "setpol -R newgroup=sales sales",
+            "chgrp -p sales sales",
+            "chown --persistent *.sales sales",
+            "chmod 2775 sales"
+        ],
+        "correctAnswer": ["chmod g+s sales","chmod 2775 sales"]
+    },
+    {
+        "id": 10,
+        "topic": "LPIC-101",
+        "type": "multiple-choice",
+        "question": "In order to display all currently mounted filesystems, which of the following commands could be used? (Choose two.)",
+        "options": [
+            "cat /proc/self/mounts",
+            "free",
+            "lsmounts",
+            "mount",
+            "cat /proc/filesystems"
+        ],
+        "correctAnswer": ["cat /proc/self/mounts","mount"]
+    },
+    {
+        "id": 11,
+        "topic": "LPIC-101",
+        "type": "fill-in",
+        "question": "Which command displays the current disk space usage for all mounted file systems? (Specify ONLY the command without any path or parameters).",
+        "options": ["df"],
+        "correctAnswer": "df"
+    },
+    {
+        "id": 12,
+        "topic": "LPIC-101",
+        "type": "single-choice",
+        "question": "Which chown command changes the ownership to dave and the group to staff on a file named data.txt?",
+        "options": [
+            "chown dave/staff data.txt",
+            "chown -u dave -g staff data.txt",
+            "chown --user dave --group staff data.txt",
+            "chown dave+staff data.txt",
+            "chown dave:staff data.txt"
+        ],
+        "correctAnswer": "chown dave:staff data.txt"
+    },
+    {
+        "id": 13,
+        "topic": "LPIC-101",
+        "type": "single-choice",
+        "question": "When considering the use of hard links, what are valid reasons not to use hard links?",
+        "options": [
+            "Hard links are not available on all Linux systems because traditional filesystems, such as ext4, do not support them",
+            "Each hard link has individual ownership, permissions and ACLs which can lead to unintended disclosure of file content",
+            "Hard links are specific to one filesystem and cannot point to files on another filesystem",
+            "If users other than root should be able to create hard links, suln has to be installed and configured",
+            "When a hard linked file is changed, a copy of the file is created and consumes additional space"
+        ],
+        "correctAnswer": "Hard links are specific to one filesystem and cannot point to files on another filesystem"
+    },
+    {
+        "id": 14,
+        "topic": "LPIC-101",
+        "type": "single-choice",
+        "question": "In compliance with the FHS, in which of the directories are man pages found?",
+        "options": [
+            "/opt/man/",
+            "/usr/doc/",
+            "/usr/share/man/",
+            "/var/pkg/man",
+            "/var/man/"
+        ],
+        "correctAnswer": "/usr/share/man/"
+    },
+    {
+        "id": 15,
+        "topic": "LPIC-101",
+        "type": "fill-in",
+        "question": "Which file in the /proc filesystem lists parameters passed from the bootloader to the kernel? (Specify the file name only without any path.)",
+        "options": ["cmdline"],
+        "correctAnswer": "cmdline"
+    },
+    {
+        "id": 16,
+        "topic": "LPIC-101",
+        "type": "single-choice",
+        "question": "What is the process ID number of the init process on a System V init based system?",
+        "options": [
+            "-1",
+            "0",
+            "1",
+            "It is different with each reboot","It is set to the current run level"],
+        "correctAnswer": "1"
+    },
+    {
+        "id": 17,
+        "topic": "LPIC-101",
+        "type": "single-choice",
+        "question": "Which daemon handles power management events on a Linux system?",
+        "options": [
+            "acpid",
+            "batteryd",
+            "pwrmgntd",
+            "psd",
+            "inetd"],
+        "correctAnswer": "acpid"
+    },
+    {
+        "id": 18,
+        "topic": "LPIC-101",
+        "type": "multiple-choice",
+        "question": "Which of the following statements are true about the boot sequence of a PC using a BIOS? (Choose two.)",
+        "options": [
+            "Some parts of the boot process can be configured from the BIOS",
+            "Linux does not require the assistance of the BIOS to boot a computer",
+            "The BIOS boot process starts only if secondary storage, such as the hard disk, is functional",
+            "The BIOS initiates the boot process after turning the computer on",
+            "The BIOS is started by loading hardware drivers from secondary storage, such as the hard disk"
+        ],
+        "correctAnswer": ["Some parts of the boot process can be configured from the BIOS","The BIOS initiates the boot process after turning the computer on"]
+    },
+    {
+        "id": 19,
+        "topic": "LPIC-101",
+        "type": "multiple-choice",
+        "question": "What is true regarding UEFI firmware? (Choose two.)",
+        "options": [
+            "It can read and interpret partition tables",
+            "It can use and read certain file systems",
+            "It stores its entire configuration on the /boot/ partition",
+            "It is stored in a special area within the GPT metadata",
+            "It is loaded from a fixed boot disk position"
+        ],
+        "correctAnswer": ["It can read and interpret partition tables","It can use and read certain file systems"]
+    },
+    {
+        "id": 20,
+        "topic": "LPIC-101",
+        "type": "single-choice",
+        "question": "A faulty kernel module is causing issues with a network interface card. Which of the following actions ensures that this module is not loaded automatically when the system boots?",
+        "options": [
+            "Using lsmod --remove --autoclean without specifying the name of a specific module",
+            "Using modinfo -k followed by the name of the offending module",
+            "Using modprobe -r followed by the name of the offending module",
+            "Adding a blacklist line including the name of the offending module to the file /etc/modprobe.d/blacklist.conf",
+            "Deleting the kernel module’s directory from the file system and recompiling the kernel, including its modules"
+        ],
+        "correctAnswer": "Adding a blacklist line including the name of the offending module to the file /etc/modprobe.d/blacklist.conf"
+    },
+    {
+        "id": 21,
+        "topic": "LPIC-101",
+        "type": "multiple-choice",
+        "question": "When is the content of the kernel ring buffer reset? (Choose two.)",
+        "options": [
+            "When the ring buffer is explicitly reset using the command dmesg --clear",
+            "When the ring buffer is read using dmesg without any additional parameters",
+            "When a configurable amount of time, 15 minutes by default, has passed",
+            "When the kernel loads a previously unloaded kernel module",
+            "When the system is shut down or rebooted"
+        ],
+        "correctAnswer": ["When the ring buffer is explicitly reset using the command dmesg --clear","When the system is shut down or rebooted"]
+    },
+    {
+        "id": 22,
+        "topic": "LPIC-101",
+        "type": "single-choice",
+        "question": "What is the first program the Linux kernel starts at boot time when using System V init?",
+        "options": [
+            "/lib/init.so",
+            "/proc/sys/kernel/init",
+            "/etc/rc.d/rcinit",
+            "/sbin/init",
+            "/boot/init"
+        ],
+        "correctAnswer": "/sbin/init"
+    },
+    {
+        "id": 23,
+        "topic": "LPIC-101",
+        "type": "single-choice",
+        "question": "A Debian package creates several files during its installation. Which of the following commands searches for packages owning the file /etc/debian_version?",
+        "options": [
+            "apt-get search /etc/debian_version",
+            "apt -r /etc/debian_version",
+            "find /etc/debian_version -dpkg",
+            "dpkg -S /etc/debian_version",
+            "apt-file /etc/debian_version"
+        ],
+        "correctAnswer": "dpkg -S /etc/debian_version"
+    },
+    {
+        "id": 24,
+        "topic": "LPIC-101",
+        "type": "single-choice",
+        "question": "What is contained on the EFI System Partition?",
+        "options": [
+            "The Linux root file system",
+            "The first stage boot loader",
+            "The default swap space file",
+            "The Linux default shell binaries",
+            "The user home directories"
+        ],
+        "correctAnswer": "The first stage boot loader"
     }
+
 ]

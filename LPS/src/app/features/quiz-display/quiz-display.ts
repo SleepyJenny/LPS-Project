@@ -5,10 +5,12 @@ import { ModusManager } from '../../core/services/modus-manager';
 import { QuizMode } from '../../core/quiz-mode.type';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs/internal/Observable';
+import { QuizContent } from '../quiz-content/quiz-content';
+import { StudyContent } from '../study-content/study-content';
 
 @Component({
   selector: 'app-quiz-display',
-  imports: [CommonModule],
+  imports: [CommonModule, QuizContent, StudyContent],
   templateUrl: './quiz-display.html',
   styleUrl: './quiz-display.css',
 })

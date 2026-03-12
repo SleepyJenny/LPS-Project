@@ -1,0 +1,40 @@
+.container {
+    display: flex;
+    flex-direction: column; /* Untereinander anordnen */
+    gap: 10px; /* Abstand zwischen den Elementen */
+    align-items: center; /* Zentriert die Elemente horizontal */
+}
+.question {
+    background-color: #F9FAFB;
+    padding: 20px;
+    border-radius: 15px;
+    font-weight: bold; /* Hebt die Frage hervor */
+    font-size: large; /* Größere Schriftgröße für die Frage */
+    max-width: 900px;
+    margin-bottom: 50px; /* Abstand zwischen Frage und Antworten */
+}
+.answer {
+    background-color: #F9FAFB;
+    padding: 10px;
+    border-radius: 15px;
+    max-width: 400px;
+    min-width: 200px; /* Mindestbreite für Antworten */
+    margin-bottom: 50px; /* Abstand zwischen Antworten und nächster Frage */;
+}
+.start-quiz {
+    background-color: #4CAF50; /* Grüner Hintergrund für den Start-Quiz-Button */
+    color: white; /* Weißer Text */
+    padding: 10px 20px; /* Innenabstand des Buttons */
+    border: none; /* Kein Rahmen */
+    border-radius: 5px; /* Abgerundete Ecken */
+    cursor: pointer; /* Cursor zeigt an, dass es klickbar ist */
+    font-size: medium; /* Mittlere Schriftgröße für den Button */
+}
+.last-question-button {
+    margin-left: 0%; /* Positioniert den Button am linken Rand */
+    background-color: F9FAFB; /* Grüner Hintergrund für den Button */
+}
+.next-question-button {
+    margin-right: 0%; /* Positioniert den Button am rechten Rand */
+    background-color: F9FAFB; /* Grüner Hintergrund für den Button */
+}

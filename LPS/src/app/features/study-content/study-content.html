@@ -1,0 +1,35 @@
+@if (quizRunning$ | async) {
+  
+  @let index = currentQuestion$ | async;
+
+  @if ((index !== null) && (index !== undefined)) {
+
+    <div class="container">
+      <div class="question">
+        {{ allQuestions()[index]?.question }}
+      </div>
+      <div class="answer">
+        {{ allQuestions()[index]?.correctAnswer }}
+      </div>
+    </div>
+    <div>
+      <button (click)="previousQuestion()" class="last-question-button" [disabled]="index === 0">
+        last question
+      </button>
+
+      <button (click)="nextQuestion()" class="next-question-button" [disabled]="index === allQuestions().length - 1">
+        next question
+      </button>
+    </div>
+  } @else {
+    <p>Loading question...</p>
+  }
+
+} 
+@else {
+
+  <button (click)="startQuiz()" class="start-quiz">
+    Please start the quiz to display the content.
+  </button>
+
+}
