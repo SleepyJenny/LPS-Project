@@ -25,6 +25,7 @@ export class QuizContent {
   quizRunning$!: Observable<boolean>;
   currentQuestion$!: Observable<number>;
   wrongAnswersCount$!: Observable<number>;
+  
 
   // Signal to hold all the questions for the selected quiz mode
   allQuestions = signal<QuestionsInterface[]>([]);
@@ -35,7 +36,7 @@ export class QuizContent {
   // Inject the service into the constructor
   constructor(private questionsService: QuestionsService, private modusManager: ModusManager) {
   // Initialize Observables from ModusManager to track quiz mode, running state, and current question index
-  this.quizMode$ = this.modusManager.quizMode$; 
+  this.quizMode$ = this.modusManager.quizMode$;
   this.quizRunning$ = this.modusManager.quizRunning$;
   this.currentQuestion$ = this.modusManager.currentQuestion$;
   this.wrongAnswersCount$ = this.modusManager.wrongAnswersCount$;
@@ -66,9 +67,11 @@ export class QuizContent {
 
   previousQuestion() {
     this.modusManager.previousQuestion();
+    this.selectedAnswer = null;
   }
 
   selectAnswer(answer: string) {
+
     this.selectedAnswer = answer;
   }
 }

@@ -56,13 +56,20 @@ export class ModusManager {
 
   // Quiz control methods
   startQuiz() {
+
+    // Reset before starting
+    this.userAnswers = [];
+    this.wrongAnswersCountSubject.next(0);
+
     this.quizRunningSubject.next(true);
     this.currentQuestionSubject.next(0); // Quiz beginnt immer bei Frage 0
   }
   stopQuiz() {
+
+    // We reset in both start and stop to avoid errors and unwanted behaviors.
     this.quizRunningSubject.next(false);
-    this.wrongAnswersCountSubject.next(0); // Reset wrong answers count at the start of the quiz
-    this.userAnswers = []; // Reset user answers at the start of the quiz
+    this.wrongAnswersCountSubject.next(0); 
+    this.userAnswers = []; 
   }
   nextQuestion() {
     const current = this.currentQuestionSubject.value;
@@ -83,7 +90,7 @@ export class ModusManager {
     if (answers !== this.allQuestions[this.currentQuestionSubject.value].correctAnswer ) {
       this.wrongAnswersCountSubject.next(this.wrongAnswersCountSubject.value + 1);
       // if full-exam Mode is set, we call failQuiz Logic after 8 wrong answers
-      if (this.quizModeSubject.value === 'full-exam' && this.wrongAnswersCountSubject.value === 8) {
+      if (this.quizModeSubject.value === 'full-exam' && this.wrongAnswersCountSubject.value >= 8) {
         // QUIZ ENDS
         this.stopQuiz();
       }
