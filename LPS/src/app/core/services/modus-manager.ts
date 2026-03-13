@@ -24,6 +24,13 @@ export class ModusManager {
   private currentQuestionSubject = new BehaviorSubject<number>(0);
   currentQuestion$ = this.currentQuestionSubject.asObservable();
 
+  // Tracking wrong answers
+  private wrongAnswersCountSubject = new BehaviorSubject<number>(0);
+  wrongAnswersCount$ = this.wrongAnswersCountSubject.asObservable();
+
+  // user selected answers
+  private userAnswers: (string | null)[] = [];
+
   private allQuestions: QuestionsInterface[] = [];
 
   constructor(private questionsService: QuestionsService) {
@@ -31,12 +38,15 @@ export class ModusManager {
     this.questionsService.getAllQuestions().subscribe(q => this.allQuestions = q);
   }
 
-  // Mode serlected by user
+
+  // Mode selected by user
+  // Set in QuizConfigurator and used in StudyContent to load the corresponding questions
   setMode(mode: QuizMode) {
     this.quizModeSubject.next(mode);
     this.loadQuestionsForMode(mode);  
   }
 
+  // Load questions based on selected quiz mode
   private loadQuestionsForMode(mode: QuizMode) {
     this.questionsService.getQuestionsByMode(mode).subscribe(questions => {
       this.allQuestions = questions;
@@ -49,25 +59,39 @@ export class ModusManager {
     this.quizRunningSubject.next(true);
     this.currentQuestionSubject.next(0); // Quiz beginnt immer bei Frage 0
   }
-
   stopQuiz() {
     this.quizRunningSubject.next(false);
+    this.wrongAnswersCountSubject.next(0); // Reset wrong answers count at the start of the quiz
+    this.userAnswers = []; // Reset user answers at the start of the quiz
   }
-
   nextQuestion() {
     const current = this.currentQuestionSubject.value;
     this.currentQuestionSubject.next(current + 1);
   }
-
   previousQuestion() {
     const current = this.currentQuestionSubject.value;
     if (current > 0) {
       this.currentQuestionSubject.next(current - 1);
     }
   }
+  trackUserAnswers(answers: string | null) {
 
-  get currentQuestion(): QuestionsInterface | null {
-    const index = this.currentQuestionSubject.value;
-    return this.allQuestions[index] ?? null;
+    // appends user Anser to Array
+    // Check if correct and track wrong answers
+    this.userAnswers.push(answers);
+    // We still need to implement avoiding duplicates when user goes back and changes answer, but for now we just track every answer given by the user
+    if (answers !== this.allQuestions[this.currentQuestionSubject.value].correctAnswer ) {
+      this.wrongAnswersCountSubject.next(this.wrongAnswersCountSubject.value + 1);
+      // if full-exam Mode is set, we call failQuiz Logic after 8 wrong answers
+      if (this.quizModeSubject.value === 'full-exam' && this.wrongAnswersCountSubject.value === 8) {
+        // QUIZ ENDS
+        this.stopQuiz();
+      }
+    }
+  }
+
+  numberOfWrongAnswers(): number {
+    // Return the number of wrong answers
+    return this.wrongAnswersCountSubject.value; 
   }
 }

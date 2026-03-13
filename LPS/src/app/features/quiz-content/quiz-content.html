@@ -1,2 +1,69 @@
-<p>quiz-content works!</p>
-<p>Your Exam will be displayed here.</p>
+@if (quizRunning$ | async) {
+  
+  @let index = currentQuestion$ | async;
+  @let quizMode = quizMode$ | async;
+
+  @if ((index !== null) && (index !== undefined)) {
+    
+    @let question = allQuestions()[index];
+    <div class="container">
+        <div class="question">
+            {{ question?.question }}
+        </div>
+      
+        <div class="answers-grid">
+
+        @for (opt of question?.options; track opt;) {
+
+            <div
+                class="answer"
+                (click)="selectAnswer(opt)"
+                [class.selected]="selectedAnswer === opt"
+                [class.correct]="selectedAnswer === opt && opt === question?.correctAnswer && quizMode === 'partial-exam'"
+                [class.wrong]="selectedAnswer === opt && opt !== question?.correctAnswer && quizMode === 'partial-exam'"
+                >
+                {{ opt }}
+            </div>
+        }
+        </div>
+    </div>
+    
+    <div class="navigation">
+        <button (click)="previousQuestion()" [disabled]="index === 0">
+            last question
+        </button>
+        <div>Wrong Answers: {{ wrongAnswersCount$ | async }}</div>
+        <button (click)="nextQuestion()" [disabled]="index === allQuestions().length - 1">
+            next question
+        </button>
+    </div>
+  } @else {
+    <p>Loading question...</p>
+  }
+
+} 
+@else {
+
+    @let quizMode = quizMode$ | async;
+
+    <div class="start-quiz-container" >
+        @switch (quizMode) {
+            @case ('partial-exam') {
+                <div>
+                    <p class="warning">In Partial Exam mode, wrong answers will be tracked. Try to minimize mistakes!</p>
+                    <div (click)="userStartQuiz()" class="start-quiz">Start Partial Exam</div>
+                </div>
+            }
+            @case ('full-exam') {
+                <div>
+                    <p class="warning">In Full Exam mode, the Exam will end with 8 wrong answers.Try to minimize mistakes!</p>
+                    <div (click)="userStartQuiz()" class="start-quiz">Start Full Exam</div>
+                </div>
+            }
+            @default {
+                <p>Something went wrong</p>
+            }
+        }
+  </div>
+
+}

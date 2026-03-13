@@ -3,6 +3,7 @@
     flex-direction: column; /* Untereinander anordnen */
     gap: 10px; /* Abstand zwischen den Elementen */
     align-items: center; /* Zentriert die Elemente horizontal */
+    padding-bottom: 60px;
 }
 .question {
     background-color: #F9FAFB;
@@ -15,11 +16,39 @@
 }
 .answer {
     background-color: #F9FAFB;
-    padding: 10px;
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
     border-radius: 15px;
-    max-width: 400px;
-    min-width: 200px; /* Mindestbreite für Antworten */
-    margin-bottom: 50px; /* Abstand zwischen Antworten und nächster Frage */;
+    min-width: 200px;
+    text-align: center;
+
+    cursor: pointer;
+    transition: transform 0.15s ease,
+                box-shadow 0.15s ease,
+                background-color 0.15s ease;
+
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+.answer:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+    background-color: #FFFFFF;
+}
+.answer:active {
+    transform: scale(0.97);
+}
+.answers-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+.answers-grid .answer:last-child:nth-child(odd) {
+    grid-column: span 2;
+    justify-self: center;
+    max-width: 200px;
 }
 .start-quiz {
     background-color: #4CAF50; /* Grüner Hintergrund für den Start-Quiz-Button */
@@ -29,6 +58,13 @@
     border-radius: 5px; /* Abgerundete Ecken */
     cursor: pointer; /* Cursor zeigt an, dass es klickbar ist */
     font-size: medium; /* Mittlere Schriftgröße für den Button */
+}
+.navigation{
+    display:flex;
+    justify-content:space-between;
+    width:100%;
+    max-width:900px;
+    margin-top:30px;
 }
 .last-question-button {
     margin-left: 0%; /* Positioniert den Button am linken Rand */

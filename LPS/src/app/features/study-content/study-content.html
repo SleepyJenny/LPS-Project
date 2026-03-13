@@ -4,15 +4,32 @@
 
   @if ((index !== null) && (index !== undefined)) {
 
+    @let question = allQuestions()[index];
+
     <div class="container">
       <div class="question">
-        {{ allQuestions()[index]?.question }}
+        {{ question?.question }}
       </div>
-      <div class="answer">
-        {{ allQuestions()[index]?.correctAnswer }}
-      </div>
+
+      <div class="answers-grid">
+
+        @if (question.type === 'single-choice' || question.type === 'fill-in') {
+          <div
+                class="answer">
+                {{ question.correctAnswer}}
+            </div>
+        } @else {
+          @for (opt of question?.correctAnswer; track opt) {
+            <div
+                class="answer">
+                {{ opt }}
+            </div>
+          } 
+        }   
+        </div>
     </div>
-    <div>
+
+    <div class="navigation">
       <button (click)="previousQuestion()" class="last-question-button" [disabled]="index === 0">
         last question
       </button>
