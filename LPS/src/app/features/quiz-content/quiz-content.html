@@ -20,7 +20,12 @@
         or have different functionality -->
         @if (question.type === 'fill-in') {
             <div class="answer">
-            Fill-In Answer will go here.
+            <input 
+            type="text"
+            placeholder="Answer here ..."
+            [value]="selectedAnswers[0] || ''"
+            (input)="onFillInInput($event)"
+            />
             </div>
         } @else {
             @for (opt of question?.options; track opt;) {

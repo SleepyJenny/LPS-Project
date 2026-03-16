@@ -100,11 +100,14 @@ export class QuizContent {
     } else {
       this.selectedAnswers = [];
     }
-
   }
 
   // To easier Display in HTML
   isAnswerSelected(opt: string): boolean {
   return this.selectedAnswers.includes(opt);
-}
+  }
+  onFillInInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.selectedAnswers = [input.value]
+  }
 }

@@ -126,8 +126,14 @@ export class ModusManager {
 
   // Helper Method to Compare User answers with Correct Answers
   private compareAnswers(user: string[], correct: string[]): boolean {
+    
   if (user.length !== correct.length) return false;
-  return user.every(ans => correct.includes(ans));
+
+  // prepare string before comparing  
+  const normalize = (s: string) => s.trim();
+  
+  // comparing user answer and correct answer
+  return user.every(ans => correct.some(c => normalize(c) === normalize(ans)));
   }
   numberOfWrongAnswers(): number {
     // Return the number of wrong answers
