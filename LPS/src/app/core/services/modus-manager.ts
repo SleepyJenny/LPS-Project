@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { QuizMode } from '../quiz-mode.type';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { take } from 'rxjs/operators';
 import { QuestionsInterface } from '../questions-interface';
 import { QuestionsService } from './questions-service';
 
-// Zuständig für den Quizverlauf, sowie die Regeln der einzelnen Modi
+// Keeps track of QuizMode, QuizState, UserAnswers
+// Handles Answering Logic
 
 @Injectable({
   providedIn: 'root',
@@ -13,11 +15,12 @@ import { QuestionsService } from './questions-service';
 export class ModusManager {
 
   // Manages the QuizMode selected by User
-  private quizModeSubject = new BehaviorSubject<QuizMode>(null);
+  private quizModeSubject = new BehaviorSubject<QuizMode | null>(null);
   quizMode$ = this.quizModeSubject.asObservable();
 
   // Quiz running or not
-  quizRunningSubject = new BehaviorSubject<boolean>(false); // Observable to track whether the quiz is currently running, initialized with false
+  // Tracks quiz running state
+  quizRunningSubject = new BehaviorSubject<boolean>(false);
   quizRunning$ = this.quizRunningSubject.asObservable(); // Observable to allow other components to react to changes in the quiz running state
 
   // current question
@@ -30,12 +33,13 @@ export class ModusManager {
 
   // user selected answers with question id
   private userAnswers = new Map<number, string[]>();
+  private failedQuestionsIds = new Set<number>();
 
   private allQuestions: QuestionsInterface[] = [];
 
   constructor(private questionsService: QuestionsService) {
     // load questions on initialization
-    this.questionsService.getAllQuestions().subscribe(q => this.allQuestions = q);
+    this.questionsService.getAllQuestions().pipe(take(1)).subscribe(q => this.allQuestions = q);
   }
 
 
@@ -45,7 +49,6 @@ export class ModusManager {
     this.quizModeSubject.next(mode);
     this.loadQuestionsForMode(mode);  
   }
-
   // Load questions based on selected quiz mode
   private loadQuestionsForMode(mode: QuizMode) {
     this.questionsService.getQuestionsByMode(mode).subscribe(questions => {
@@ -53,7 +56,6 @@ export class ModusManager {
       this.currentQuestionSubject.next(0);
     });
   }
-
   // Quiz control methods
   startQuiz() {
 
@@ -63,6 +65,7 @@ export class ModusManager {
 
     this.quizRunningSubject.next(true);
     this.currentQuestionSubject.next(0); // Quiz beginnt immer bei Frage 0
+    this.failedQuestionsIds.clear();
   }
   stopQuiz() {
 
@@ -81,39 +84,44 @@ export class ModusManager {
       this.currentQuestionSubject.next(current - 1);
     }
   }
+
   trackUserAnswers(answers: string[]) {
 
-    // appends user Anser to Array
-    // Check if correct and track wrong answers
+    // We use currentQuestionSubject.Value to find the question in allQuestions()
+    const currentIndex = this.currentQuestionSubject.value;
+    const question = this.allQuestions[currentIndex];
 
-    const id = this.allQuestions[this.currentQuestionSubject.value].id;
-    this.userAnswers.set(id, answers);
-
-    // Validation
-    const question = this.allQuestions.find(q => q.id === id);
+    // Return if no question found or index out of bounds
     if (!question) return;
-
-    // Making sure it works with the JSON Structure
-    const isCorrect = this.compareAnswers(answers, Array.isArray(question.correctAnswer) ? question.correctAnswer : [question.correctAnswer]);
-
-    if (!isCorrect) {
-    this.wrongAnswersCountSubject.next(this.wrongAnswersCountSubject.value + 1);
-
-      if (this.quizModeSubject.value === 'full-exam' && this.wrongAnswersCountSubject.value >= 8) {
-        this.stopQuiz();
-      }
+    if (currentIndex < 0 || currentIndex >= this.allQuestions.length) {
+      return; // Prevent out-of-bounds access
     }
 
-    /*this.userAnswers.push(answers);
-    // I still need to implement avoiding duplicates when user goes back and changes answer, but for now we just track every answer given by the user
-    if (answers !== this.allQuestions[this.currentQuestionSubject.value].correctAnswer ) {
-      this.wrongAnswersCountSubject.next(this.wrongAnswersCountSubject.value + 1);
-      // if full-exam Mode is set, we call failQuiz Logic after 8 wrong answers
-      if (this.quizModeSubject.value === 'full-exam' && this.wrongAnswersCountSubject.value >= 8) {
-        // QUIZ ENDS
-        this.stopQuiz();
-      }
-    }*/
+    // Save user answer
+    this.userAnswers.set(question.id, answers);
+
+    // Check user answer
+    const correctOnes = Array.isArray(question.correctAnswer) 
+    ? question.correctAnswer 
+    : [question.correctAnswer];
+  
+    const isCorrect = this.compareAnswers(answers, correctOnes);
+
+    // update set instead of counting up
+    if (!isCorrect) {
+    this.failedQuestionsIds.add(question.id);
+    } else {
+    // in case user changed from wrong to correct
+    this.failedQuestionsIds.delete(question.id);
+    }
+
+    // Update wrongAnswerSubject with new count
+    this.wrongAnswersCountSubject.next(this.failedQuestionsIds.size);
+
+    // Quit Exam after 8 wrong Answers
+    if (this.failedQuestionsIds.size >= 8 && this.quizModeSubject.value === 'full-exam') {
+      this.stopQuiz();
+    }
   }
 
   // Helper Method to Compare User answers with Correct Answers
@@ -121,9 +129,16 @@ export class ModusManager {
   if (user.length !== correct.length) return false;
   return user.every(ans => correct.includes(ans));
   }
-
   numberOfWrongAnswers(): number {
     // Return the number of wrong answers
     return this.wrongAnswersCountSubject.value; 
+  }
+  // Get UserAnswer based on Id
+  getUserAnswer(questionId: number): string[] {
+    return this.userAnswers.get(questionId) || [];
+  }
+  // Returns Index of current question
+  getCurrentIndex(): number {
+    return this.currentQuestionSubject.value;
   }
 }

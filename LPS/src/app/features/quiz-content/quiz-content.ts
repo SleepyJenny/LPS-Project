@@ -59,16 +59,22 @@ export class QuizContent {
   
   nextQuestion() {
 
-    // we tell modusManager to check if the selected answer is correct and to track wrong answers
+    // call modusManager to track answers
     this.modusManager.trackUserAnswers(this.selectedAnswers);
 
     this.modusManager.nextQuestion();
-    this.selectedAnswers = []; // Reset selected answer when moving to the next question
-  }
 
+    this.updateSelectedAnswers();
+  }
   previousQuestion() {
+
+    // trackUserAnswers in case the user made a change
+    this.modusManager.trackUserAnswers(this.selectedAnswers);
+
     this.modusManager.previousQuestion();
-    this.selectedAnswers = [];
+  
+    // load answer from previous question
+    this.updateSelectedAnswers();
   }
 
   selectAnswer(answer: string) {
@@ -83,6 +89,20 @@ export class QuizContent {
       this.selectedAnswers.push(answer);
     }
   }
+  updateSelectedAnswers() {
+
+    // Get Index so we can use it to find the question
+    const currentIdx = this.modusManager.getCurrentIndex();
+    const question = this.allQuestions()[currentIdx];
+    // If we found a question, apply user Answer
+    if (question) {
+      this.selectedAnswers = this.modusManager.getUserAnswer(question.id)
+    } else {
+      this.selectedAnswers = [];
+    }
+
+  }
+
   // To easier Display in HTML
   isAnswerSelected(opt: string): boolean {
   return this.selectedAnswers.includes(opt);

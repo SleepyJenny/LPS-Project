@@ -4,6 +4,8 @@
     gap: 10px; /* Abstand zwischen den Elementen */
     align-items: center; /* Zentriert die Elemente horizontal */
     padding-bottom: 60px;
+    max-height: 400px;
+    min-height: 400px;
 }
 .question {
     background-color: #F9FAFB;
