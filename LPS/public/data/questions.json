@@ -21,7 +21,7 @@
         "type":"single-choice",
         "question":"Which of the following commands changes the number of days before the ext3 filesystem on /dev/sda1 has to run through a full filesystem check while booting?",
         "options":["tune2fs -d 200 /dev/sda1","tune2fs -i 200 /dev/sda17", "tune2fs -c 200 /dev/sda1", "tune2fs -n 200 /dev/sda1", "tune2fs --days 200 /dev/sda1"],
-        "correctAnswer":"tune2fs -i 200 /dev/sda1"
+        "correctAnswer":"tune2fs -i 200 /dev/sda17"
     },
     {
         "id": 4,

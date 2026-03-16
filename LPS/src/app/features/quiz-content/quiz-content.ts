@@ -30,7 +30,8 @@ export class QuizContent {
   // Signal to hold all the questions for the selected quiz mode
   allQuestions = signal<QuestionsInterface[]>([]);
 
-  selectedAnswer: string | null = null;
+  // Must be an Array, or else I can only select one answer
+  selectedAnswers: string[] = [];
 
   
   // Inject the service into the constructor
@@ -59,19 +60,31 @@ export class QuizContent {
   nextQuestion() {
 
     // we tell modusManager to check if the selected answer is correct and to track wrong answers
-    this.modusManager.trackUserAnswers(this.selectedAnswer);
+    this.modusManager.trackUserAnswers(this.selectedAnswers);
 
     this.modusManager.nextQuestion();
-    this.selectedAnswer = null; // Reset selected answer when moving to the next question
+    this.selectedAnswers = []; // Reset selected answer when moving to the next question
   }
 
   previousQuestion() {
     this.modusManager.previousQuestion();
-    this.selectedAnswer = null;
+    this.selectedAnswers = [];
   }
 
   selectAnswer(answer: string) {
 
-    this.selectedAnswer = answer;
+  const index = this.selectedAnswers.indexOf(answer);
+
+    if (index > -1) {
+      // if already selcted, remove answer
+      this.selectedAnswers.splice(index, 1);
+    } else {
+      // add answer to array
+      this.selectedAnswers.push(answer);
+    }
   }
+  // To easier Display in HTML
+  isAnswerSelected(opt: string): boolean {
+  return this.selectedAnswers.includes(opt);
+}
 }

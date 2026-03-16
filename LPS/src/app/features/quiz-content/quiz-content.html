@@ -1,30 +1,41 @@
 @if (quizRunning$ | async) {
   
-  @let index = currentQuestion$ | async;
-  @let quizMode = quizMode$ | async;
+    @let index = currentQuestion$ | async;
+    @let quizMode = quizMode$ | async;
 
-  @if ((index !== null) && (index !== undefined)) {
+    @if ((index !== null) && (index !== undefined)) {
     
+    <!-- If we have a valid question, we get it from the allQuestions Array -->
     @let question = allQuestions()[index];
+    
+    <!-- We display the data here-->
     <div class="container">
         <div class="question">
             {{ question?.question }}
         </div>
       
         <div class="answers-grid">
+    
+        <!-- Depending on question type, the wnsers will be displayed differently
+        or have different functionality -->
+        @if (question.type === 'fill-in') {
 
-        @for (opt of question?.options; track opt;) {
+            Fill-In Answer will go here.
 
-            <div
-                class="answer"
-                (click)="selectAnswer(opt)"
-                [class.selected]="selectedAnswer === opt"
-                [class.correct]="selectedAnswer === opt && opt === question?.correctAnswer && quizMode === 'partial-exam'"
-                [class.wrong]="selectedAnswer === opt && opt !== question?.correctAnswer && quizMode === 'partial-exam'"
-                >
-                {{ opt }}
-            </div>
-        }
+        } @else {
+            @for (opt of question?.options; track opt;) {
+                <!-- now tests against an array-->
+                <div
+                    class="answer"
+                    (click)="selectAnswer(opt)"
+                    [class.selected]="isAnswerSelected(opt)"
+                    [class.correct]="isAnswerSelected(opt) && opt === question?.correctAnswer && quizMode === 'partial-exam'"
+                    [class.wrong]="isAnswerSelected(opt) && opt !== question?.correctAnswer && quizMode === 'partial-exam'"
+                    >
+                    {{ opt }}
+                </div>
+            }
+        }   
         </div>
     </div>
     

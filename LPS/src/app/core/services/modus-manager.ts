@@ -28,8 +28,8 @@ export class ModusManager {
   private wrongAnswersCountSubject = new BehaviorSubject<number>(0);
   wrongAnswersCount$ = this.wrongAnswersCountSubject.asObservable();
 
-  // user selected answers
-  private userAnswers: (string | null)[] = [];
+  // user selected answers with question id
+  private userAnswers = new Map<number, string[]>();
 
   private allQuestions: QuestionsInterface[] = [];
 
@@ -58,7 +58,7 @@ export class ModusManager {
   startQuiz() {
 
     // Reset before starting
-    this.userAnswers = [];
+    this.userAnswers = new Map<number, string[]>();
     this.wrongAnswersCountSubject.next(0);
 
     this.quizRunningSubject.next(true);
@@ -69,7 +69,7 @@ export class ModusManager {
     // We reset in both start and stop to avoid errors and unwanted behaviors.
     this.quizRunningSubject.next(false);
     this.wrongAnswersCountSubject.next(0); 
-    this.userAnswers = []; 
+    this.userAnswers = new Map<number, string[]>(); 
   }
   nextQuestion() {
     const current = this.currentQuestionSubject.value;
@@ -81,12 +81,31 @@ export class ModusManager {
       this.currentQuestionSubject.next(current - 1);
     }
   }
-  trackUserAnswers(answers: string | null) {
+  trackUserAnswers(answers: string[]) {
 
     // appends user Anser to Array
     // Check if correct and track wrong answers
-    this.userAnswers.push(answers);
-    // We still need to implement avoiding duplicates when user goes back and changes answer, but for now we just track every answer given by the user
+
+    const id = this.allQuestions[this.currentQuestionSubject.value].id;
+    this.userAnswers.set(id, answers);
+
+    // Validation
+    const question = this.allQuestions.find(q => q.id === id);
+    if (!question) return;
+
+    // Making sure it works with the JSON Structure
+    const isCorrect = this.compareAnswers(answers, Array.isArray(question.correctAnswer) ? question.correctAnswer : [question.correctAnswer]);
+
+    if (!isCorrect) {
+    this.wrongAnswersCountSubject.next(this.wrongAnswersCountSubject.value + 1);
+
+      if (this.quizModeSubject.value === 'full-exam' && this.wrongAnswersCountSubject.value >= 8) {
+        this.stopQuiz();
+      }
+    }
+
+    /*this.userAnswers.push(answers);
+    // I still need to implement avoiding duplicates when user goes back and changes answer, but for now we just track every answer given by the user
     if (answers !== this.allQuestions[this.currentQuestionSubject.value].correctAnswer ) {
       this.wrongAnswersCountSubject.next(this.wrongAnswersCountSubject.value + 1);
       // if full-exam Mode is set, we call failQuiz Logic after 8 wrong answers
@@ -94,7 +113,13 @@ export class ModusManager {
         // QUIZ ENDS
         this.stopQuiz();
       }
-    }
+    }*/
+  }
+
+  // Helper Method to Compare User answers with Correct Answers
+  private compareAnswers(user: string[], correct: string[]): boolean {
+  if (user.length !== correct.length) return false;
+  return user.every(ans => correct.includes(ans));
   }
 
   numberOfWrongAnswers(): number {
