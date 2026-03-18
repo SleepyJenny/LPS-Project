@@ -10,6 +10,7 @@
     
     <!-- We display the data here-->
     <div class="container">
+        <div class="question-type">{{question?.type}}</div>
         <div class="question">
             {{ question?.question }}
         </div>
@@ -45,12 +46,16 @@
     </div>
     
     <div class="navigation">
-        <button (click)="previousQuestion()" [disabled]="index === 0">
+        <button class="last-question-button" (click)="previousQuestion()" [disabled]="index === 0">
             last question
         </button>
         <div>Wrong Answers: {{ wrongAnswersCount$ | async }}</div>
-        <button (click)="nextQuestion()" [disabled]="index === allQuestions().length - 1">
-            next question
+        <button class="next-question-button" (click)="handleNextOrFinish()">
+            @if (index === allQuestions().length - 1) {
+                Finish Exam
+            } @else {
+                Next Question
+            }
         </button>
     </div>
   } @else {
@@ -60,26 +65,32 @@
 } 
 @else {
 
-    @let quizMode = quizMode$ | async;
+    @if(quizFinished$ | async) {
 
-    <div class="start-quiz-container" >
-        @switch (quizMode) {
-            @case ('partial-exam') {
-                <div>
-                    <p class="warning">In Partial Exam mode, wrong answers will be tracked. Try to minimize mistakes!</p>
-                    <div (click)="userStartQuiz()" class="start-quiz">Start Partial Exam</div>
-                </div>
-            }
-            @case ('full-exam') {
-                <div>
-                    <p class="warning">In Full Exam mode, the Exam will end with 8 wrong answers.Try to minimize mistakes!</p>
-                    <div (click)="userStartQuiz()" class="start-quiz">Start Full Exam</div>
-                </div>
-            }
-            @default {
-                <p>Something went wrong</p>
-            }
-        }
-  </div>
+        <app-quiz-overview></app-quiz-overview>
 
+    } @else {
+        
+        @let quizMode = quizMode$ | async;
+
+        <div class="start-quiz-container" >
+            @switch (quizMode) {
+                @case ('partial-exam') {
+                    <div>
+                        <p class="warning">In Partial Exam mode, wrong answers will be tracked. Try to minimize mistakes!</p>
+                        <div (click)="userStartQuiz()" class="start-quiz">Start Partial Exam</div>
+                    </div>
+                }
+                @case ('full-exam') {
+                    <div>
+                        <p class="warning">In Full Exam mode, the Exam will end with 8 wrong answers.Try to minimize mistakes!</p>
+                        <div (click)="userStartQuiz()" class="start-quiz">Start Full Exam</div>
+                    </div>
+                }
+                @default {
+                    <p>Something went wrong</p>
+                }
+            }
+        </div>
+    }
 }

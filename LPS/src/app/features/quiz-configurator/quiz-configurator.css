@@ -5,13 +5,32 @@
 }
 .section {
   background-color: #F9FAFB;
-  border-radius: 10px;
+  border-radius: 15px;
   font-size: 18px;
   font-weight: bold;
   padding: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 .container button {
+  border: none;           /* No border */
+  background: none;       /* No background */
+  background-color: #F9FAFB;
+  border-radius: 15px;
+  padding: 10px 20px;
   font-size: 14px;
-  cursor: pointer;
   width: 150px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  cursor: pointer;
+    transition: transform 0.15s ease,
+                box-shadow 0.15s ease,
+                background-color 0.15s ease;
 }
+.container button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+    background-color: #FFFFFF;
+}
+.container button:active {
+    transform: scale(0.97);
+}
+

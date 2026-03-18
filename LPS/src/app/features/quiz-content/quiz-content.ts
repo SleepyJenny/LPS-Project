@@ -6,6 +6,7 @@ import { QuestionsService } from '../../core/services/questions-service';
 import { ModusManager } from '../../core/services/modus-manager';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { CommonModule } from '@angular/common';
+import { QuizOverview } from '../quiz-overview/quiz-overview';
 
 
 // This Component will display the exam content
@@ -14,7 +15,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-quiz-content',
-  imports: [CommonModule],
+  imports: [CommonModule, QuizOverview],
   templateUrl: './quiz-content.html',
   styleUrl: './quiz-content.css',
 })
@@ -25,6 +26,7 @@ export class QuizContent {
   quizRunning$!: Observable<boolean>;
   currentQuestion$!: Observable<number>;
   wrongAnswersCount$!: Observable<number>;
+  quizFinished$!: Observable<boolean>;
   
 
   // Signal to hold all the questions for the selected quiz mode
@@ -41,6 +43,7 @@ export class QuizContent {
   this.quizRunning$ = this.modusManager.quizRunning$;
   this.currentQuestion$ = this.modusManager.currentQuestion$;
   this.wrongAnswersCount$ = this.modusManager.wrongAnswersCount$;
+  this.quizFinished$ = this.modusManager.quizFinished$;
 
   }
 
@@ -54,7 +57,22 @@ export class QuizContent {
 
   // Quiz control methods
   userStartQuiz() {
-    this.modusManager.startQuiz(); // Set quiz running state to true when the quiz starts
+    // Gets called when the user presses the start Button in the beginning of the exam.
+    this.modusManager.startQuiz();
+  }
+  userFinishQuiz() {
+    // Save last answer before exam ends
+    this.modusManager.trackUserAnswers(this.selectedAnswers);
+    this.modusManager.finishQuiz();
+  }
+  handleNextOrFinish() {
+  const isLastQuestion = this.modusManager.getCurrentIndex() === this.allQuestions().length - 1;
+
+  if (isLastQuestion) {
+    this.userFinishQuiz();
+  } else {
+    this.nextQuestion();
+  }
   }
   
   nextQuestion() {

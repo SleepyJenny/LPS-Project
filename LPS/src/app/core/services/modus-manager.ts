@@ -18,10 +18,15 @@ export class ModusManager {
   private quizModeSubject = new BehaviorSubject<QuizMode | null>(null);
   quizMode$ = this.quizModeSubject.asObservable();
 
-  // Quiz running or not
   // Tracks quiz running state
+  // This refers to the quiz Loop, including the Overview. 
   quizRunningSubject = new BehaviorSubject<boolean>(false);
   quizRunning$ = this.quizRunningSubject.asObservable(); // Observable to allow other components to react to changes in the quiz running state
+
+  // Quiz Finished?
+  // Has the user answered all questions?
+  quizFinishedSubject = new BehaviorSubject<boolean>(false);
+  quizFinished$ = this.quizFinishedSubject.asObservable();
 
   // current question
   private currentQuestionSubject = new BehaviorSubject<number>(0);
@@ -58,7 +63,7 @@ export class ModusManager {
   }
   // Quiz control methods
   startQuiz() {
-
+    // GEts called when the user presses start
     // Reset before starting
     this.userAnswers = new Map<number, string[]>();
     this.wrongAnswersCountSubject.next(0);
@@ -66,14 +71,17 @@ export class ModusManager {
     this.quizRunningSubject.next(true);
     this.currentQuestionSubject.next(0); // Quiz beginnt immer bei Frage 0
     this.failedQuestionsIds.clear();
+    this.quizFinishedSubject.next(false);
   }
   stopQuiz() {
 
     // We reset in both start and stop to avoid errors and unwanted behaviors.
     this.quizRunningSubject.next(false);
     this.wrongAnswersCountSubject.next(0); 
-    this.userAnswers = new Map<number, string[]>(); 
+    this.userAnswers = new Map<number, string[]>();
+    this.quizFinishedSubject.next(false);
   }
+
   nextQuestion() {
     const current = this.currentQuestionSubject.value;
     this.currentQuestionSubject.next(current + 1);
@@ -81,8 +89,7 @@ export class ModusManager {
   previousQuestion() {
     const current = this.currentQuestionSubject.value;
     if (current > 0) {
-      this.currentQuestionSubject.next(current - 1);
-    }
+      this.currentQuestionSubject.next(current - 1); }
   }
 
   trackUserAnswers(answers: string[]) {
@@ -120,7 +127,7 @@ export class ModusManager {
 
     // Quit Exam after 8 wrong Answers
     if (this.failedQuestionsIds.size >= 8 && this.quizModeSubject.value === 'full-exam') {
-      this.stopQuiz();
+      this.finishQuiz();
     }
   }
 
@@ -143,8 +150,12 @@ export class ModusManager {
   getUserAnswer(questionId: number): string[] {
     return this.userAnswers.get(questionId) || [];
   }
-  // Returns Index of current question
   getCurrentIndex(): number {
+    // Returns Index of current question
     return this.currentQuestionSubject.value;
+  }
+  finishQuiz() {
+    this.quizFinishedSubject.next(true);
+    this.quizRunningSubject.next(false);
   }
 }

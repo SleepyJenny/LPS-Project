@@ -4,6 +4,10 @@
     gap: 10px; /* Abstand zwischen den Elementen */
     align-items: center; /* Zentriert die Elemente horizontal */
     padding-bottom: 60px;
+    max-height: 400px;
+    min-height: 400px;
+    max-width: 900px;
+    min-width: 900px;
 }
 .question {
     background-color: #F9FAFB;
@@ -12,7 +16,9 @@
     font-weight: bold; /* Hebt die Frage hervor */
     font-size: large; /* Größere Schriftgröße für die Frage */
     max-width: 900px;
+    min-width: 900px;
     margin-bottom: 50px; /* Abstand zwischen Frage und Antworten */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 .answer {
     background-color: #F9FAFB;
@@ -68,9 +74,44 @@
 }
 .last-question-button {
     margin-left: 0%; /* Positioniert den Button am linken Rand */
-    background-color: F9FAFB; /* Grüner Hintergrund für den Button */
+    border: none;           /* No border */
+    background: none;       /* No background */
+    background-color: #F9FAFB;
+    border-radius: 15px;
+    padding: 10px 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transition: transform 0.15s ease,
+                box-shadow 0.15s ease,
+                background-color 0.15s ease;
 }
+.last-question-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+    background-color: #FFFFFF;
+}
+.container button:active {
+    transform: scale(0.97);
+}
+
 .next-question-button {
     margin-right: 0%; /* Positioniert den Button am rechten Rand */
-    background-color: F9FAFB; /* Grüner Hintergrund für den Button */
+    border: none;           /* No border */
+    background: none;       /* No background */
+    background-color: #F9FAFB;
+    border-radius: 15px;
+    padding: 10px 20px; 
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transition: transform 0.15s ease,
+                box-shadow 0.15s ease,
+                background-color 0.15s ease;
+}
+.next-question-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+    background-color: #FFFFFF;
+}
+.next-question-button:active {
+    transform: scale(0.97);
 }

@@ -1,16 +1,12 @@
 .container {
+  background-color: #F9FAFB;
   display: flex;
   flex-direction: column; /* Untereinander anordnen */
-  gap: 10px; /* Abstand zwischen den Elementen */
-}
-.question {
-  background-color: #F9FAFB;
-  padding: 20px;
-  border-radius: 10px;
-}
-.answer {
-  background-color: #F9FAFB;
-  padding: 10px;
-  border-radius: 10px;
-  max-width: 400px;
+  align-items: center; /* Zentriert die Elemente horizontal */
+  justify-content: center;
+  border-radius: 35px;
+  min-width: 600px;
+  min-height: 300px;
+  font-weight: bold; /* Hebt die Frage hervor */
+  font-size: x-large; /* Größere Schriftgröße für die Frage */
 }
