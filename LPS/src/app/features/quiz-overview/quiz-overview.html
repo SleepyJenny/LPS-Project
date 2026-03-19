@@ -1,1 +1,57 @@
-<p>quiz-overview works!</p>
+<div class="summary-container">
+    <div class="score-card">
+        <h2>Results</h2>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="label">Beantwortet</span>
+                <span class="value">{{answeredByUser.size}} / {{allQuestions.length}}</span>
+            </div>
+            <div class="stat-item" [class.danger]="numberOfMistakes >= 8">
+                <span class="label">Fehler</span>
+                <span class="value">{{numberOfMistakes}}</span>
+            </div>
+            <div class="stat-item success">
+                <span class="label">Korrekt</span>
+                <span class="value">{{answeredByUser.size - numberOfMistakes}}</span>
+            </div>
+        </div>
+        
+        @if (numberOfMistakes >= 8) {
+            <p class="status-msg warning">Failed! You need to study more.</p>
+        } @else {
+            <p class="status-msg success">Passed! You are ready for the real deal.</p>
+        }
+    </div>
+
+    <div class="scroll-area">
+        <div >
+            @for (item of allQuestions; track item.id) {
+            @let userSelection = answeredByUser.get(item.id) || [];
+            @let isCorrect = compareAnswers(userSelection, item.correctAnswer);
+
+            <div class="question-card" [class.is-wrong]="!isCorrect">
+                <div class="card-header">
+                    <span class="q-number">Frage {{ $index + 1 }}</span>
+                    <span class="q-badge" [class.correct]="isCorrect">
+                        {{ isCorrect ? '✓ Richtig' : '✗ Falsch' }}
+                    </span>
+                </div>
+                
+                <p class="question-text">{{item.question}}</p>
+                
+                <div class="answer-comparison">
+                    <div class="answer-box user">
+                        <small>Deine Antwort:</small>
+                        <p>{{ userSelection.join(', ') || 'Keine Antwort' }}</p>
+                    </div>
+                    <div class="answer-box correct">
+                        <small>Richtige Lösung:</small>
+                        <p>{{ item.correctAnswer }}</p>
+                    </div>
+                </div>
+            </div>
+        }
+        </div>
+    </div>
+</div> 
+ 

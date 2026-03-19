@@ -24,7 +24,7 @@ export class ModusManager {
   quizRunning$ = this.quizRunningSubject.asObservable(); // Observable to allow other components to react to changes in the quiz running state
 
   // Quiz Finished?
-  // Has the user answered all questions?
+  // true if all questionas answered or exam stopped because of too many mistakes
   quizFinishedSubject = new BehaviorSubject<boolean>(false);
   quizFinished$ = this.quizFinishedSubject.asObservable();
 
@@ -132,16 +132,20 @@ export class ModusManager {
   }
 
   // Helper Method to Compare User answers with Correct Answers
-  private compareAnswers(user: string[], correct: string[]): boolean {
-    
-  if (user.length !== correct.length) return false;
+  compareAnswers(user: string[], correct: string[]): boolean {
 
-  // prepare string before comparing  
-  const normalize = (s: string) => s.trim();
-  
-  // comparing user answer and correct answer
-  return user.every(ans => correct.some(c => normalize(c) === normalize(ans)));
-  }
+    // We have to make sure the types are correct
+    const userArr = Array.isArray(user) ? user : (user ? [user] : []);
+    const correctArr = Array.isArray(correct) ? correct : (correct ? [correct] : []);
+
+    if (userArr.length !== correctArr.length) return false;
+
+    const normalize = (s: string) => s.toString().trim().toLowerCase();
+    
+    return userArr.every(ans => 
+      correctArr.some(c => normalize(c) === normalize(ans))
+    );
+    }
   numberOfWrongAnswers(): number {
     // Return the number of wrong answers
     return this.wrongAnswersCountSubject.value; 
@@ -157,5 +161,11 @@ export class ModusManager {
   finishQuiz() {
     this.quizFinishedSubject.next(true);
     this.quizRunningSubject.next(false);
+  }
+  getQuestions(): QuestionsInterface[] {
+    return this.allQuestions;
+  }
+  getQuestionsAnsweredByUser(): Map<number, string[]> {
+    return this.userAnswers;
   }
 }
