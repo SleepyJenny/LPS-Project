@@ -9,8 +9,14 @@
     @let question = allQuestions()[index];
     
     <!-- We display the data here-->
-    <div class="container">
-        <div class="question-type">{{question?.type}}</div>
+    <div class="quiz-wrapper">
+
+        <div class="quiz-meta">
+            <span class="badge mode-badge">{{ quizMode }}</span>
+            <span class="badge count-badge">Frage {{ index + 1 }} von {{ allQuestions().length }}</span>
+            <span class="type-tag">{{ question?.type }}</span>
+        </div>
+
         <div class="question">
             {{ question?.question }}
         </div>
@@ -45,7 +51,7 @@
         </div>
     </div>
     
-    <div class="navigation">
+    <div class="navigation-bar">
         <button class="last-question-button" (click)="previousQuestion()" [disabled]="index === 0">
             last question
         </button>
